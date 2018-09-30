@@ -7,11 +7,24 @@ import query from '../queries/fetchSongs';
 
 class SongList extends Component {
 
+  onSongDelete = async (id) => {
+    await this.props.mutate({
+      variables: { id },
+    });
+    this.props.data.refetch(); //refetch data after deleting song if the query is in this component
+  }
+
   renderSongs() {
     const { songs } = this.props.data;
-    return songs.map(song => (
-      <li key={song.id} className="collection-item">
-        {song.title}
+    return songs.map(({ id, title }) => (
+      <li key={id} className="collection-item">
+        {title}
+        <i
+          className="material-icons right"
+          onClick={() => this.onSongDelete(id)}
+        >
+          delete
+        </i>
       </li>
     ));
   }
@@ -35,5 +48,14 @@ class SongList extends Component {
   }
 }
 
-export default graphql(query)(SongList);
+const mutation = gql`
+  mutation DeleteSong($id: ID){
+    deleteSong(id: $id){
+      id
+      title
+    }
+  }
+`;
+
+export default graphql(mutation)(graphql(query)(SongList));
 
