@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import { Link } from 'react-router-dom';
-import createHistory from "history/createHashHistory"
+import createHistory from "history/createHashHistory";
+import query from '../queries/fetchSongs';
 
 const history = createHistory();
 
@@ -17,7 +18,8 @@ class SongCreate extends Component {
     await this.props.mutate({
       variables: {
         title: this.state.title,
-      }
+      },
+      refreshQueries: [{ query }], 
     });
     history.push('/');
   }
