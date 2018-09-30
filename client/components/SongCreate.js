@@ -2,20 +2,24 @@ import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import { Link } from 'react-router-dom';
+import createHistory from "history/createHashHistory"
+
+const history = createHistory();
 
 class SongCreate extends Component {
   state = {
     title: '',
   }
 
-  onSubmit = (event) => {
+  onSubmit = async (event) => {
     event.preventDefault();
 
-    this.props.mutate({
+    await this.props.mutate({
       variables: {
         title: this.state.title,
       }
-    })
+    });
+    history.push('/');
   }
 
   render() {
